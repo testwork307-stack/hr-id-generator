@@ -98,18 +98,16 @@ def find_photo_path(root_dir: str, requested: str):
     """Find photo by stem match (case/ext-insensitive), search recursively."""
     if not requested:
         return None
-    requested = str(requested).strip().replace("\\", "/")
+    requested = str(requested).strip().lower()
     req_stem = Path(requested).stem.lower()
-    candidates = []
+
     for dirpath, _, filenames in os.walk(root_dir):
         for fn in filenames:
-            if Path(fn).stem.lower() == req_stem:
-                candidates.append(os.path.join(dirpath, fn))
-    if candidates:
-        order = {".png": 0, ".jpg": 1, ".jpeg": 2, ".bmp": 3}
-        candidates.sort(key=lambda p: order.get(Path(p).suffix.lower(), 9))
-        return candidates[0]
+            fn_stem = Path(fn).stem.lower()
+            if fn_stem == req_stem:  # match name without caring about folders
+                return os.path.join(dirpath, fn)
     return None
+
 
 def crop_face_and_shoulders(image_path: str):
     """Optional: crop around the first detected face area."""
