@@ -109,6 +109,7 @@ def find_photo_path(root_dir: str, requested: str):
     return None
 
 
+
 def crop_face_and_shoulders(image_path: str):
     """Optional: crop around the first detected face area."""
     img = cv2.imread(image_path)
